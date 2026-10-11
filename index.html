@@ -34,101 +34,110 @@
         </div>
     </header>
 
-    <main class="container">
+    <main>
 
-        <!-- Page hero -->
+        <!-- First container: hero + tests -->
 
-        <header class="header">
+        <div class="container container--before-band">
 
-            <h1>Psychology Tests</h1>
+            <!-- Page hero -->
 
-            <p>
-                Explore your mental health through brief, science-based screening tests
-            </p>
+            <header class="header">
 
-        </header>
+                <h1>Psychology Tests</h1>
 
+                <p>
+                    Explore your mental health through brief, science-based screening tests
+                </p>
 
-        <!-- Content card: tests, purpose, preview, what can I do -->
-
-        <div class="content-card">
-
-            <!-- Tests -->
-
-            <section class="tests">
-
-                <a href="tests/gad7.html" class="test-card">
-
-                    <div class="test-info">
-                        <h2>Anxiety Test</h2>
-
-                        <p>
-                            Explore thoughts, feelings and reactions related to anxiety.
-                        </p>
-                    </div>
-
-                    <div class="arrow">
-                        →
-                    </div>
-
-                </a>
+            </header>
 
 
-                <a href="tests/adhd.html" class="test-card">
+            <!-- Content card: tests -->
 
-                    <div class="test-info">
-                        <h2>ADHD Self-Assessment</h2>
+            <div class="content-card">
 
-                        <p>
-                            Explore attention and activity-level patterns.
-                        </p>
-                    </div>
+                <!-- Tests: when there are more than data-visible, the rest fold under a "View more" link (js/collapsible-list.js) -->
 
-                    <div class="arrow">
-                        →
-                    </div>
+                <section class="tests" data-collapsible data-visible="4">
 
-                </a>
+                    <a href="tests/gad7.html" class="test-card">
 
+                        <div class="test-info">
+                            <h2>Anxiety Test</h2>
 
-                <a href="tests/autism.html" class="test-card">
+                            <p>
+                                Explore thoughts, feelings and reactions related to anxiety.
+                            </p>
+                        </div>
 
-                    <div class="test-info">
-                        <h2>Autism Traits Self-Assessment</h2>
+                        <div class="arrow">
+                            →
+                        </div>
 
-                        <p>
-                            Explore common autism-related trait patterns.
-                        </p>
-                    </div>
-
-                    <div class="arrow">
-                        →
-                    </div>
-
-                </a>
-
-                <a href="tests/bipolar.html" class="test-card">
-
-                    <div class="test-info">
-                        <h2>Bipolar Mood Patterns Self-Assessment</h2>
-
-                        <p>
-                            Reflect on distinct changes in mood, energy, sleep, and activity.
-                        </p>
-                    </div>
-
-                    <div class="arrow">
-                        →
-                    </div>
-
-                </a>
-
-            </section>
+                    </a>
 
 
-            <!-- Purpose -->
+                    <a href="tests/adhd.html" class="test-card">
 
-            <div class="purpose">
+                        <div class="test-info">
+                            <h2>ADHD Self-Assessment</h2>
+
+                            <p>
+                                Explore attention and activity-level patterns.
+                            </p>
+                        </div>
+
+                        <div class="arrow">
+                            →
+                        </div>
+
+                    </a>
+
+
+                    <a href="tests/autism.html" class="test-card">
+
+                        <div class="test-info">
+                            <h2>Autism Traits Self-Assessment</h2>
+
+                            <p>
+                                Explore common autism-related trait patterns.
+                            </p>
+                        </div>
+
+                        <div class="arrow">
+                            →
+                        </div>
+
+                    </a>
+
+                    <a href="tests/bipolar.html" class="test-card">
+
+                        <div class="test-info">
+                            <h2>Bipolar Mood Patterns Self-Assessment</h2>
+
+                            <p>
+                                Reflect on distinct changes in mood, energy, sleep, and activity.
+                            </p>
+                        </div>
+
+                        <div class="arrow">
+                            →
+                        </div>
+
+                    </a>
+
+                </section>
+
+            </div>
+
+        </div>
+
+
+        <!-- Purpose: full-width blue band -->
+
+        <section class="purpose-band">
+            <div class="purpose-band-inner">
 
                 <p>
                     <strong>
@@ -142,74 +151,84 @@
                 </p>
 
             </div>
+        </section>
 
 
-            <!-- What will you see -->
+        <!-- Second container: preview + what can I do + footer -->
 
-            <section class="results-preview">
+        <div class="container container--after-band">
 
-                <div class="results-header">
+            <div class="content-card">
 
-                    <h2>What will you see?</h2>
+                <!-- What will you see -->
 
-                    <p>
-                        Your results will give you a clear visual read of how
-                        often relevant symptoms show up for you.
-                    </p>
+                <section class="results-preview">
 
-                </div>
+                    <div class="results-header">
 
+                        <h2>What will you see?</h2>
 
-                <div class="results">
+                        <p>
+                            Your results will give you a clear visual read of how
+                            often relevant symptoms show up for you.
+                        </p>
 
-                    <div class="result-item">
-                        <div class="result-label">
-                            <span class="result-name"><i class="ti ti-brain"></i> Symptom Frequency</span>
-                            <span class="result-percentage">0%</span>
-                        </div>
-
-                        <div class="bar-background">
-                            <div class="bar-fill"></div>
-                        </div>
                     </div>
 
-                </div>
 
-            </section>
+                    <div class="results">
+
+                        <div class="result-item">
+                            <div class="result-label">
+                                <span class="result-name"><i class="ti ti-brain"></i> Symptom Frequency</span>
+                                <span class="result-percentage">0%</span>
+                            </div>
+
+                            <div class="bar-background">
+                                <div class="bar-fill"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
 
 
-            <!-- What can I do -->
+                <!-- What can I do -->
 
-            <section class="what-can-i-do">
+                <section class="what-can-i-do">
 
-                <h2>What can I do?</h2>
+                    <h2>What can I do?</h2>
 
-                <p>
-                    After learning about your results, you will be able to find
-                    everything from games designed to improve key areas to book
-                    recommendations and clinical articles on mental health and
-                    psychology.
-                </p>
+                    <p>
+                        After learning about your results, you will be able to find
+                        everything from games designed to improve key areas to book
+                        recommendations and clinical articles on mental health and
+                        psychology.
+                    </p>
 
-            </section>
+                </section>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <footer class="footer">
+                <nav class="footer-nav">
+                    <a href="games.html">Games</a>
+                    <a href="learn.html">Learn</a>
+                    <a href="my-results.html">My Results</a>
+                </nav>
+                <p>Psychology Tests</p>
+            </footer>
 
         </div>
-
-
-        <!-- Footer -->
-
-        <footer class="footer">
-            <nav class="footer-nav">
-                <a href="games.html">Games</a>
-                <a href="learn.html">Learn</a>
-                <a href="my-results.html">My Results</a>
-            </nav>
-            <p>Psychology Tests</p>
-        </footer>
 
     </main>
 
     <script src="js/nav.js" defer></script>
+    <script src="js/collapsible-list.js" defer></script>
     <script src="js/main.js" defer></script>
 
 </body>

@@ -16,6 +16,7 @@
     --color-primary: #3678c9;
     --color-primary-light: #8fb8e8;
     --color-primary-soft: #eef6ff;
+    --color-primary-dark: #3373c3; /* primary darkened so white text (and text on white) meets WCAG AA */
 
     /* Fondos y bordes */
     --color-page-bg: #eef1f7;
@@ -64,6 +65,15 @@ body {
     max-width: 720px;
     margin: 0 auto;
     padding: 50px 0 60px;
+}
+
+/* Containers that sit above / below a full-width band (e.g. the home page's purpose band) */
+.container--before-band {
+    padding-bottom: 56px;
+}
+
+.container--after-band {
+    padding-top: 56px;
 }
 
 /* ==========================================================================
@@ -299,27 +309,101 @@ body {
 }
 
 /* ==========================================================================
-   Purpose
+   Collapsible list ("View more" curtain) — built by js/collapsible-list.js
    ========================================================================== */
 
-.purpose {
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid var(--color-border-light);
+/* The extra cards live in a grid whose single row animates 0fr <-> 1fr,
+   so the curtain opens to the content's real height with no measuring. */
+.collapsible-more {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden; /* collapsed cards can't be tabbed to or read by screen readers */
+    transition: grid-template-rows 0.35s ease, visibility 0s linear 0.35s;
+}
+
+.collapsible-more.open {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.35s ease, visibility 0s linear 0s;
+}
+
+.collapsible-more-inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Once fully open, stop clipping so card hover shadows/lift aren't cut off */
+.collapsible-more.settled .collapsible-more-inner {
+    overflow: visible;
+}
+
+.collapsible-more-inner > .tests {
+    padding-top: 16px; /* same gap as between the visible cards */
+}
+
+.collapsible-toggle-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+}
+
+.collapsible-toggle {
+    /* Side padding gives the keyboard focus ring room; the negative margin
+       keeps the text itself flush with the right edge of the cards. */
+    padding: 4px 6px;
+    margin-right: -6px;
+    border-radius: 4px;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+.collapsible-toggle:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .collapsible-more,
+    .collapsible-more.open {
+        transition: none;
+    }
+}
+
+/* ==========================================================================
+   Purpose band (full-width blue strip on the home page)
+   ========================================================================== */
+
+.purpose-band {
+    width: 100%;
+    background: var(--color-primary-dark);
+}
+
+.purpose-band-inner {
+    width: 90%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 0;
     text-align: center;
 }
 
-.purpose p {
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--color-subtle);
+.purpose-band p {
     max-width: 620px;
     margin: 0 auto;
+
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-bg);
 }
 
-.purpose strong {
-    color: var(--color-heading-alt);
-    font-weight: 600;
+.purpose-band strong {
+    font-weight: 700;
 }
 
 /* ==========================================================================
@@ -348,6 +432,13 @@ body {
     font-size: 14px;
     line-height: 1.6;
     color: var(--color-subtle);
+}
+
+/* When the preview opens a card (it follows the purpose band), no divider above it */
+.content-card > .results-preview:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
 }
 
 /* Individual result */
@@ -464,6 +555,14 @@ body {
    ========================================================================== */
 
 @media (max-width: 600px) {
+
+    .purpose-band-inner {
+        padding: 40px 0;
+    }
+
+    .container--before-band {
+        padding-bottom: 40px;
+    }
 
     .nav-toggle {
         display: flex;

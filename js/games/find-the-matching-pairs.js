@@ -7,9 +7,10 @@
  * tiles are even worth pairing up.
  *
  * Adapted from the original draft: same round/pairs/mistakes logic,
- * but icons are rendered as emoji (no external icon font needed) and
- * class names use the match- prefix so this game's CSS never collides
- * with Find the Triplicate's game- classes.
+ * but icons are rendered with Tabler Icons (webfont linked in
+ * find-the-matching-pairs.html) and class names use the match- prefix
+ * so this game's CSS never collides with Find the Triplicate's game-
+ * classes.
  */
 
 (function () {

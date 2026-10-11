@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>2048 — Psychology Tests</title>
+
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/quiz.css">
+    <link rel="stylesheet" href="../css/games.css">
+
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+
+<body>
+
+    <!-- Site header (same on every page) -->
+
+    <header class="site-header">
+        <div class="site-header-inner">
+
+            <a href="../index.html" class="site-logo">🧠 Psychology Tests</a>
+
+            <nav class="site-nav" id="site-nav">
+                <a href="../games.html">Games</a>
+                <a href="../learn.html">Learn</a>
+                <a href="../my-results.html">My Results</a>
+            </nav>
+
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
+
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="quiz-card">
+
+            <div class="quiz-intro" style="margin-bottom: 20px;">
+                <h1>2048</h1>
+                <p class="game-tagline">Plan ahead and stay patient</p>
+                <p class="quiz-description">
+                    Slide the tiles with the arrow keys, or swipe on the board. When two tiles with the same number touch, they merge into one. Can you reach 2048? There's no timer, so take all the time you need.
+                </p>
+            </div>
+
+            <!-- Score + new game -->
+            <div class="g2048-toolbar">
+
+                <div class="g2048-stats">
+                    <div class="g2048-stat" id="g2048-score-box">
+                        <span class="g2048-stat-label">Score</span>
+                        <span class="g2048-stat-value" id="g2048-score">0</span>
+                    </div>
+                    <div class="g2048-stat">
+                        <span class="g2048-stat-label">Best</span>
+                        <span class="g2048-stat-value" id="g2048-best">0</span>
+                    </div>
+                </div>
+
+                <button id="g2048-new" type="button" class="quiz-btn quiz-btn-secondary"><i class="ti ti-refresh"></i> New Game</button>
+
+            </div>
+
+            <!-- Board -->
+            <div class="g2048-board" id="g2048-board" role="group" aria-label="2048 game board">
+                <div class="g2048-grid" id="g2048-grid" aria-hidden="true"><!-- Background cells, built by JS --></div>
+                <div class="g2048-tiles" id="g2048-tiles"><!-- Tiles, rendered by JS --></div>
+            </div>
+
+            <p class="quiz-attribution">
+                2048 was created by Gabriele Cirulli (MIT License), and is itself inspired by 1024 and Threes. This version is an independent implementation written for this site.
+            </p>
+
+        </div>
+
+        <footer class="footer">
+            <nav class="footer-nav">
+                <a href="../games.html">Games</a>
+                <a href="../learn.html">Learn</a>
+                <a href="../my-results.html">My Results</a>
+            </nav>
+            <p>Psychology Tests</p>
+        </footer>
+
+    </main>
+
+    <!-- Win modal: shown when a 2048 tile is created -->
+    <div id="g2048-win" class="game-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="g2048-win-title">
+        <div class="game-modal-card">
+
+            <div class="game-modal-icon"><i class="ti ti-trophy"></i></div>
+
+            <h2 id="g2048-win-title">You reached 2048!</h2>
+            <p class="game-modal-sub">Take a breath. You can keep going or start a fresh board.</p>
+
+            <div class="game-completion-actions">
+                <button id="g2048-keep" type="button" class="quiz-btn quiz-btn-primary">Keep Going</button>
+                <button id="g2048-win-new" type="button" class="quiz-btn quiz-btn-secondary">New Game</button>
+                <a href="../games.html" class="quiz-btn game-btn-complementary">More Games</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Game-over modal: shown when no moves are left -->
+    <div id="g2048-over" class="game-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="g2048-over-title">
+        <div class="game-modal-card">
+
+            <div class="game-modal-icon g2048-icon-neutral"><i class="ti ti-layout-grid"></i></div>
+
+            <h2 id="g2048-over-title">No more moves</h2>
+            <p class="game-modal-sub">Take a breath and try again whenever you're ready.</p>
+
+            <div class="game-modal-stats">
+                <div>
+                    <span class="game-modal-label">Score</span>
+                    <span id="g2048-over-score" class="game-modal-value game-modal-value-accent">0</span>
+                </div>
+                <div>
+                    <span class="game-modal-label">Best</span>
+                    <span id="g2048-over-best" class="game-modal-value">0</span>
+                </div>
+            </div>
+
+            <div class="game-completion-actions">
+                <button id="g2048-over-new" type="button" class="quiz-btn quiz-btn-primary">Try Again</button>
+                <a href="../games.html" class="quiz-btn game-btn-complementary">More Games</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../js/nav.js" defer></script>
+    <script src="../js/games/2048.js" defer></script>
+
+</body>
+</html>

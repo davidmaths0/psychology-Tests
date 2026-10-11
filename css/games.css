@@ -354,14 +354,16 @@
     gap: 10px;
 }
 
-/* Exact RGB complement of the site's primary blue (#3678c9). */
+/* Complement of the site's primary blue (#3678c9): same amber hue as the
+   exact RGB complement (#c98736), darkened so white text meets WCAG AA
+   contrast (4.7:1 normal, 6.1:1 on hover). */
 .game-btn-complementary {
-    background: #c98736;
+    background: #9d692a;
     color: #ffffff;
 }
 
 .game-btn-complementary:hover {
-    background: #b7791f;
+    background: #855924;
 }
 
 /* ==========================================================================
@@ -551,4 +553,236 @@
     width: auto;
     display: inline-block;
     padding: 12px 28px;
+}
+
+/* ==========================================================================
+   2048 (prefixed g2048- to stay independent from the other games' classes)
+   ========================================================================== */
+
+/* Toolbar: score boxes + New Game button */
+
+.g2048-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.g2048-toolbar .quiz-btn {
+    flex: none;
+    padding: 10px 16px;
+}
+
+.g2048-stats {
+    display: flex;
+    gap: 10px;
+}
+
+.g2048-stat {
+    position: relative;
+    min-width: 84px;
+    padding: 8px 14px;
+
+    background: var(--color-page-bg);
+    border-radius: var(--radius-md);
+
+    text-align: center;
+}
+
+.g2048-stat-label {
+    display: block;
+    margin-bottom: 2px;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+}
+
+.g2048-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-heading);
+}
+
+/* "+N" that floats up from the score when tiles merge */
+.g2048-score-add {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-primary);
+    pointer-events: none;
+
+    animation: g2048ScoreAdd 0.6s ease-out forwards;
+}
+
+@keyframes g2048ScoreAdd {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-26px); }
+}
+
+/* Board */
+
+.g2048-board {
+    --g2048-gap: 10px;
+
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
+
+    background: var(--color-heading-alt);
+    border-radius: var(--radius-md);
+
+    touch-action: none; /* swipes on the board move tiles instead of scrolling the page */
+    user-select: none;
+    -webkit-user-select: none;
+
+    container-type: inline-size; /* lets the tile numbers scale with the board (cqw units) */
+}
+
+.g2048-grid,
+.g2048-tiles {
+    position: absolute;
+    inset: var(--g2048-gap);
+}
+
+.g2048-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: var(--g2048-gap);
+}
+
+.g2048-cell {
+    background: rgba(255, 255, 255, 0.09);
+    border-radius: 8px;
+}
+
+.g2048-tiles {
+    --g2048-cell: calc((100% - 3 * var(--g2048-gap)) / 4);
+}
+
+/* A tile = positioned wrapper (slides) + inner box (colors, number, pop animations).
+   Position comes from --r / --c (row / column) set by 2048.js. */
+.g2048-tile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--g2048-cell);
+    height: var(--g2048-cell);
+
+    transform: translate(
+        calc(var(--c) * (100% + var(--g2048-gap))),
+        calc(var(--r) * (100% + var(--g2048-gap)))
+    );
+    transition: transform 110ms ease-in-out; /* keep in sync with SLIDE_MS in 2048.js */
+}
+
+.g2048-tile-inner {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Number size scales with the board; px values are the fallback */
+.g2048-tile-inner { font-size: 40px; font-size: 9.5cqw; }
+.g2048-tile-inner[data-digits="3"] { font-size: 34px; font-size: 8cqw; }
+.g2048-tile-inner[data-digits="4"] { font-size: 28px; font-size: 6.6cqw; }
+.g2048-tile-inner[data-digits="5"],
+.g2048-tile-inner[data-digits="6"] { font-size: 22px; font-size: 5.2cqw; }
+
+/* Tile colors: brand blues for small values, the brand's amber complement for
+   large ones, so no tile ever blends into the navy board. All number/background
+   pairs meet WCAG AA contrast (4.5:1). */
+.g2048-v-2 { background: #eef6ff; color: #172b4d; }
+.g2048-v-4 { background: #dbe7f5; color: #172b4d; }
+.g2048-v-8 { background: #b9d3f0; color: #172b4d; }
+.g2048-v-16 { background: #8fb8e8; color: #172b4d; }
+.g2048-v-32 { background: #6aa0de; color: #172b4d; }
+.g2048-v-64 { background: #3373c3; color: #ffffff; }
+.g2048-v-128 { background: #f3dfb4; color: #172b4d; }
+.g2048-v-256 { background: #ecc98a; color: #172b4d; }
+.g2048-v-512 { background: #deaa5c; color: #172b4d; }
+.g2048-v-1024 { background: #c98736; color: #172b4d; }
+.g2048-v-2048 {
+    background: #9d692a;
+    color: #ffffff;
+    /* light ring + short glow, kept within the gap so it never smears onto neighbors */
+    box-shadow:
+        0 0 0 2px rgba(243, 223, 180, 0.85),
+        0 0 6px 2px rgba(201, 135, 54, 0.5);
+}
+.g2048-v-4096 { background: #855924; color: #ffffff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35); }
+.g2048-v-super { background: #6b4519; color: #ffffff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35); }
+
+/* Appear / merge animations. The delay lets sliding tiles arrive first;
+   "backwards" keeps the tile hidden until its animation starts. */
+.g2048-tile-new .g2048-tile-inner {
+    animation: g2048Appear 180ms ease 100ms backwards;
+}
+
+.g2048-tile-merged .g2048-tile-inner {
+    animation: g2048Pop 200ms ease 100ms backwards;
+}
+
+@keyframes g2048Appear {
+    from { opacity: 0; transform: scale(0); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes g2048Pop {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .g2048-tile {
+        transition: none;
+    }
+
+    .g2048-tile-new .g2048-tile-inner,
+    .g2048-tile-merged .g2048-tile-inner,
+    .g2048-score-add {
+        animation: none;
+    }
+}
+
+/* Game-over modal icon: neutral instead of the green "success" circle */
+.game-modal-icon.g2048-icon-neutral {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+@media (max-width: 600px) {
+
+    .g2048-board {
+        --g2048-gap: 8px;
+    }
+
+    .g2048-stat {
+        min-width: 70px;
+        padding: 7px 10px;
+    }
+
+    .g2048-stat-value {
+        font-size: 16px;
+    }
 }
