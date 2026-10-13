@@ -732,6 +732,90 @@
 .g2048-v-4096 { background: #855924; color: #ffffff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35); }
 .g2048-v-super { background: #6b4519; color: #ffffff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35); }
 
+/* =======================================================================
+   Odd One Out
+   ======================================================================= */
+
+.odd-card {
+    max-width: 700px;
+    margin-inline: auto;
+}
+
+.odd-words {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.odd-word {
+    min-height: 88px;
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-primary-soft);
+    color: var(--color-heading-alt);
+    font: inherit;
+    font-size: clamp(17px, 3vw, 22px);
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.odd-word:hover:not(:disabled) {
+    background: var(--color-border-light);
+    transform: translateY(-2px);
+}
+
+.odd-word:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.odd-word:disabled { cursor: default; }
+.odd-word.odd-correct { background: #e7f8ee; border-color: #4caf7d; color: #2f8f5b; }
+.odd-word.odd-incorrect { background: #fdecec; border-color: #e5726f; color: #c74440; animation: gameShake 0.4s ease-in-out; }
+
+.odd-feedback {
+    min-height: 24px;
+    margin: 14px 0 8px;
+    color: var(--color-subtle);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.odd-feedback.correct { color: #2f8f5b; }
+.odd-feedback.incorrect { color: #c74440; }
+
+.odd-correct-card .game-modal-icon {
+    background: #e7f8ee;
+    color: #2f8f5b;
+}
+
+.odd-correct-card h2,
+.odd-correct-card .odd-explanation {
+    color: #2f8f5b;
+}
+
+.odd-correct-card .odd-explanation {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.odd-correct-card .quiz-btn {
+    display: inline-block;
+    width: auto;
+    margin-top: 8px;
+}
+
+.odd-complete { text-align: center; }
+.odd-complete h2 { margin-bottom: 8px; color: var(--color-heading); }
+.odd-complete p { margin-bottom: 16px; color: var(--color-subtle); }
+.odd-final-mistakes strong { color: var(--color-heading); }
+.odd-complete .quiz-btn { margin: 6px; }
+
 /* Appear / merge animations. The delay lets sliding tiles arrive first;
    "backwards" keeps the tile hidden until its animation starts. */
 .g2048-tile-new .g2048-tile-inner {

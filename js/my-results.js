@@ -10,17 +10,22 @@
 const TESTS = [
     { id: "gad7", title: "Anxiety Test (GAD-7)", description: "Generalized anxiety symptoms.", url: "tests/gad7.html" },
     { id: "adhd", title: "ADHD Self-Assessment", description: "Attention and activity-level patterns.", url: "tests/adhd.html" },
-    { id: "autism", title: "Autism Traits Self-Assessment", description: "Common autism-related trait patterns.", url: "tests/autism.html" }
+    { id: "autism", title: "Autism Traits Self-Assessment", description: "Common autism-related trait patterns.", url: "tests/autism.html" },
+    // `version` must match the version in js/tests/bipolar-data.js. Progress saved
+    // with a different version is ignored (the quiz itself discards it too).
+    { id: "bipolar", title: "Bipolar Mood Patterns Self-Assessment", description: "Changes in mood, energy, sleep, and activity.", url: "tests/bipolar.html", version: 2 }
 ];
 
 /**
  * Reads a test's saved progress. Returns null if nothing is saved
  * (or if localStorage isn't available).
  */
-function getProgress(testId) {
+function getProgress(testId, version) {
     try {
         const raw = localStorage.getItem(`quiz-progress:${testId}`);
-        return raw ? JSON.parse(raw) : null;
+        const saved = raw ? JSON.parse(raw) : null;
+        if (saved && version !== undefined && saved.version !== version) return null;
+        return saved;
     } catch (error) {
         console.warn("my-results.js: could not read saved progress.", error);
         return null;
@@ -54,7 +59,7 @@ function renderHistory() {
     if (!list) return;
 
     list.innerHTML = TESTS.map((test) => {
-        const progress = getProgress(test.id);
+        const progress = getProgress(test.id, test.version);
         const status = describeStatus(progress);
 
         return `

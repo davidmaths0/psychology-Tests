@@ -5,6 +5,19 @@
  * future tests). It knows nothing about any specific test — all content
  * comes from a "testData" object (see js/tests/gad7-data.js for the shape).
  *
+ * Optional test-data fields (all tests work without them):
+ *   version         number. Bump it whenever questions/scoring change so
+ *                   answers saved with the old version are discarded.
+ *   scaleScores     points per answer, parallel to scaleLabels, e.g.
+ *                   [0, 0, 1] makes "Not sure" worth 0 and "Yes" worth 1.
+ *                   Default: each answer is worth its position (0, 1, 2...).
+ *   unsureIndex     which answer means "Not sure"; those are counted and
+ *                   shown separately in the results.
+ *   safetyNote      HTML shown in a highlighted box on the results screen.
+ *   dimension.display   "bar" (default) | "count" ("2 of 3", no bar) |
+ *                       "text" (just a sentence, no number).
+ *   dimension.unsureLabel   sentence for "text" dimensions answered "Not sure".
+ *
  * Usage:
  *   const quiz = new QuizEngine({
  *       container: "#quiz-app",
@@ -45,6 +58,7 @@ class QuizEngine {
                 savedAt: Date.now(),
                 ...extra
             };
+            if (this.testData.version !== undefined) payload.version = this.testData.version;
             localStorage.setItem(this.storageKey, JSON.stringify(payload));
         } catch (error) {
             console.warn("QuizEngine: could not save progress.", error);
@@ -54,7 +68,16 @@ class QuizEngine {
     loadProgress() {
         try {
             const raw = localStorage.getItem(this.storageKey);
-            return raw ? JSON.parse(raw) : null;
+            const saved = raw ? JSON.parse(raw) : null;
+
+            // Answers saved with another version of the questions would mean
+            // something different now, so they're thrown away.
+            if (saved && (saved.version ?? null) !== (this.testData.version ?? null)) {
+                this.clearProgress();
+                return null;
+            }
+
+            return saved;
         } catch (error) {
             console.warn("QuizEngine: could not read saved progress.", error);
             return null;
@@ -260,16 +283,21 @@ class QuizEngine {
      * (string) still works and is treated as `["x"]`.
      */
     calculateScores() {
-        const { questions, dimensions } = this.testData;
-        const maxValuePerQuestion = this.testData.scaleLabels.length - 1;
+        const { questions, dimensions, scaleLabels, unsureIndex } = this.testData;
+
+        // Points each answer is worth (by position). Default: 0, 1, 2, ...
+        const answerScores = this.testData.scaleScores || scaleLabels.map((_, i) => i);
+        const maxValuePerQuestion = Math.max(...answerScores);
 
         const scores = {};
         dimensions.forEach((dim) => {
-            scores[dim.id] = { raw: 0, max: 0 };
+            scores[dim.id] = { raw: 0, max: 0, unsure: 0 };
         });
 
         questions.forEach((question) => {
-            const value = this.answers[question.id] ?? 0;
+            const answerIndex = this.answers[question.id];
+            const value = answerIndex === undefined ? 0 : answerScores[answerIndex];
+            const isUnsure = unsureIndex !== undefined && answerIndex === unsureIndex;
             const questionDimensions =
                 question.dimensions || (question.dimension ? [question.dimension] : []);
 
@@ -277,6 +305,7 @@ class QuizEngine {
                 if (!scores[dimensionId]) return; // ignore unknown/unlisted dimension ids
                 scores[dimensionId].raw += value;
                 scores[dimensionId].max += maxValuePerQuestion;
+                if (isUnsure) scores[dimensionId].unsure++;
             });
         });
 
@@ -306,29 +335,68 @@ class QuizEngine {
      * Results screen
      * ---------------------------------------------------------------- */
 
-    renderResults() {
-        this.saveProgress({ completed: true });
+    /**
+     * One result row. The default "bar" layout is unchanged; "count" and
+     * "text" are lighter layouts for sections with only a few questions,
+     * where a percentage bar would look more precise than it really is.
+     */
+    renderDimension(dim, score) {
+        const { raw, max, percentage, unsure } = score;
+        const interpretation = this.findInterpretation(dim.id, raw);
+        const mode = dim.display || "bar";
+        const nameHtml = `${dim.icon ? `<i class="ti ti-${dim.icon}"></i>` : ""} ${dim.name}`;
+        const unsureNote = unsure > 0 ? ` · ${unsure} answered “Not sure”` : "";
 
-        const scores = this.calculateScores();
-        const { dimensions, title, attribution } = this.testData;
-
-        const resultsHtml = dimensions.map((dim) => {
-            const { raw, percentage } = scores[dim.id];
-            const interpretation = this.findInterpretation(dim.id, raw);
+        if (mode === "text") {
+            const text = raw === 0 && unsure > 0 && dim.unsureLabel
+                ? dim.unsureLabel
+                : (interpretation ? interpretation.label : "");
 
             return `
                 <div class="result-item">
                     <div class="result-label">
-                        <span class="result-name">${dim.icon ? `<i class="ti ti-${dim.icon}"></i>` : ""} ${dim.name}</span>
-                        <span class="result-percentage">${percentage}%</span>
+                        <span class="result-name">${nameHtml}</span>
                     </div>
-                    <div class="bar-background">
-                        <div class="bar-fill" style="width: ${percentage}%"></div>
-                    </div>
-                    ${interpretation ? `<p class="quiz-interpretation">${interpretation.label} (score: ${raw})</p>` : ""}
+                    <p class="quiz-interpretation">${text}</p>
                 </div>
             `;
-        }).join("");
+        }
+
+        if (mode === "count") {
+            return `
+                <div class="result-item">
+                    <div class="result-label">
+                        <span class="result-name">${nameHtml}</span>
+                        <span class="result-count">${raw} of ${max}</span>
+                    </div>
+                    ${interpretation ? `<p class="quiz-interpretation">${interpretation.label}${unsure > 0 ? ` (${unsure} answered “Not sure”)` : ""}</p>` : ""}
+                </div>
+            `;
+        }
+
+        return `
+            <div class="result-item">
+                <div class="result-label">
+                    <span class="result-name">${nameHtml}</span>
+                    <span class="result-percentage">${percentage}%</span>
+                </div>
+                <div class="bar-background">
+                    <div class="bar-fill" style="width: ${percentage}%"></div>
+                </div>
+                ${interpretation ? `<p class="quiz-interpretation">${interpretation.label} (score: ${raw}${unsureNote})</p>` : ""}
+            </div>
+        `;
+    }
+
+    renderResults() {
+        this.saveProgress({ completed: true });
+
+        const scores = this.calculateScores();
+        const { dimensions, title, attribution, safetyNote } = this.testData;
+
+        const resultsHtml = dimensions
+            .map((dim) => this.renderDimension(dim, scores[dim.id]))
+            .join("");
 
         this.root.innerHTML = `
             <div class="quiz-card">
@@ -337,6 +405,8 @@ class QuizEngine {
                 <div class="results">
                     ${resultsHtml}
                 </div>
+
+                ${safetyNote ? `<div class="quiz-safety">${safetyNote}</div>` : ""}
 
                 <p class="quiz-disclaimer">
                     This test is not a clinical diagnosis. If you're concerned

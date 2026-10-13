@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odd One Out — Psychology Tests</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/quiz.css">
+    <link rel="stylesheet" href="../css/games.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a href="../index.html" class="site-logo">🧠 Psychology Tests</a>
+            <nav class="site-nav" id="site-nav">
+                <a href="../games.html" class="active">Games</a>
+                <a href="../learn.html">Learn</a>
+                <a href="../my-results.html">My Results</a>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav">
+                <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="quiz-card odd-card">
+            <section class="quiz-intro" id="odd-intro">
+                <h1>Odd One Out</h1>
+                <p class="game-tagline">Attention to detail</p>
+                <p class="quiz-description">Choose the word that belongs to a different category. Read each word carefully: some differences are subtle.</p>
+                <p class="quiz-meta">4 rounds · 4 to 7 words · no timer</p>
+                <button id="odd-start" class="quiz-btn quiz-btn-primary">Start</button>
+            </section>
+
+            <section id="odd-play" class="hidden" aria-live="polite">
+                <div class="game-stats">
+                    <div class="game-round"><span class="game-dot"></span><span id="odd-round">ROUND 1 / 4</span></div>
+                    <div class="game-stat"><i class="ti ti-x"></i> Mistakes: <span id="odd-mistakes">0</span></div>
+                </div>
+                <div class="quiz-progress"><div id="odd-progress" class="quiz-progress-bar" style="width:25%"></div></div>
+                <p id="odd-feedback" class="odd-feedback" role="status" aria-live="polite"></p>
+                <div class="game-instruction">
+                    <div class="game-instruction-icon"><i class="ti ti-eye"></i></div>
+                    <div><p class="game-instruction-label">Attention to detail</p><p class="game-instruction-body">Tap the word that belongs to a different category.</p></div>
+                </div>
+                <div id="odd-words" class="odd-words"></div>
+                <div class="game-footer"><button id="odd-restart" class="quiz-btn quiz-btn-secondary"><i class="ti ti-refresh"></i> Restart</button><span>Find the odd one out</span></div>
+            </section>
+
+            <section id="odd-complete" class="odd-complete hidden" aria-live="polite">
+                <div class="game-modal-icon"><i class="ti ti-circle-check"></i></div>
+                <h2>Challenge completed!</h2>
+                <p>You completed all four rounds.</p>
+                <p class="odd-final-mistakes">Mistakes: <strong id="odd-final-mistakes">0</strong></p>
+                <button id="odd-play-again" class="quiz-btn quiz-btn-primary">Play Again</button>
+                <a href="../games.html" class="quiz-btn game-btn-complementary">More Games</a>
+            </section>
+        </div>
+        <footer class="footer">
+            <nav class="footer-nav"><a href="../games.html">Games</a><a href="../learn.html">Learn</a><a href="../my-results.html">My Results</a></nav>
+            <p>Psychology Tests</p>
+        </footer>
+    </main>
+    <div id="odd-correct-overlay" class="game-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="odd-correct-title">
+        <div class="game-modal-card odd-correct-card">
+            <div class="game-modal-icon"><i class="ti ti-circle-check"></i></div>
+            <h2 id="odd-correct-title">Correct!</h2>
+            <p id="odd-explanation" class="game-modal-sub odd-explanation"></p>
+            <a id="odd-next" class="quiz-btn quiz-btn-primary" href="#">Next round</a>
+        </div>
+    </div>
+    <script src="../js/nav.js" defer></script>
+    <script src="../js/games/odd-one-out.js" defer></script>
+</body>
+</html>

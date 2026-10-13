@@ -470,6 +470,13 @@ body {
     color: var(--color-primary);
 }
 
+/* Same look as the percentage, for sections shown as "2 of 3" instead of a bar */
+.result-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
 /* Progress bar */
 
 .bar-background {
